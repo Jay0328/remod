@@ -1,0 +1,23 @@
+{
+  "name": "@remod/di",
+  "version": "0.0.0",
+  "author": "Jay <gcobs135102@gmail.com>",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
+  "jsnext:main": "./esm/index.js",
+  "typings": "./esm/index.d.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "yarn build:clean && yarn test:clean",
+    "build:clean": "rm -rf ./{esm,lib} && rm -rf ./tsconfig.tsbuildinfo",
+    "build": "tsc && rollup --config rollup.config.js"
+  },
+  "dependencies": {
+    "injection-js": "^2.2.2",
+    "tslib": "^1.10.0"
+  }
+}
