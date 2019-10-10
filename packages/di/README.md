@@ -1,7 +1,7 @@
 # @remod/di
 
 This package is an adapter of dependecy injection library.  
-To avoid from breaking changes on other packages if the di library changed.
+To avoid from breaking changes on other packages if the di library which this package base on changed.
 
 ## Installation
 
