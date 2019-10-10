@@ -12,7 +12,7 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "yarn build:clean && yarn test:clean",
+    "clean": "npm run build:clean",
     "build:clean": "rm -rf ./{esm,lib} && rm -rf ./tsconfig.tsbuildinfo",
     "build": "tsc && rollup --config rollup.config.js"
   },
