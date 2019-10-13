@@ -11,7 +11,11 @@ export {
   ClassProvider,
   ExistingProvider,
   FactoryProvider,
+  ResolvedReflectiveProvider,
   InjectionToken,
+  Class,
+  TypeDecorator,
+  makeDecorator,
   Type,
   isType,
   /**
