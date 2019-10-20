@@ -1,38 +1,29 @@
 import React, { FC, ComponentType, useContext, useMemo } from 'react';
-import { Type, ReflectiveInjector } from '@remod/di';
+import { ReflectiveInjector, ResolvedReflectiveProvider } from '@remod/di';
 import { ReModuleContext, ReModuleContextData } from './re-module.context';
-import { getReModuleFromMetadata } from './get-re-module-from-metadata';
-
-export type ReModuleBootstrapComponent<P> = FC<P>;
 
 export interface ReModuleBootstrap {
-  <P>(WrappedComponent: ComponentType<P>): ReModuleBootstrapComponent<P>;
+  <P>(WrappedComponent: ComponentType<P>): FC<P>;
 }
 
-export function createReModuleBootstrap<T>(
-  cls: Type<T>,
-  Context: ReModuleContext = ReModuleContext
+function getBootstrapDisplayName(moduleName: string, WrappedComponent: ComponentType<any>) {
+  const displayName = `${WrappedComponent.displayName || WrappedComponent.name || 'Unknown'}`;
+  return `${moduleName}(${displayName})`;
+}
+
+export function createReModuleBootstrap(
+  moduleName: string,
+  resolvedProviders: ResolvedReflectiveProvider[],
+  Context: ReModuleContext
 ): ReModuleBootstrap {
-  const ReModule = getReModuleFromMetadata(cls);
-  const { providers } = ReModule;
-  const resolvedProviders = ReflectiveInjector.resolve(providers || []);
-
   function ReModuleBootstrap<P>(WrappedComponent: ComponentType<P>) {
-    const ReModuleBootstrapComponent: ReModuleBootstrapComponent<P> = props => {
+    const Bootstrap: FC<P> = props => {
       const parentModuleContextData = useContext(Context);
-
-      if (!parentModuleContextData) {
-        /**
-         * @todo add error message.
-         */
-        throw new Error('');
-      }
-
       const parentInjector = parentModuleContextData.injector;
-      const injector = useMemo(() => ReflectiveInjector.fromResolvedProviders(resolvedProviders, parentInjector), [
-        parentInjector
-      ]);
-      const contextData = useMemo<ReModuleContextData>(() => ({ injector }), [injector]);
+      const contextData = useMemo<ReModuleContextData>(() => {
+        const injector = ReflectiveInjector.fromResolvedProviders(resolvedProviders, parentInjector);
+        return { injector };
+      }, [parentInjector]);
 
       return (
         <Context.Provider value={contextData}>
@@ -41,9 +32,9 @@ export function createReModuleBootstrap<T>(
       );
     };
 
-    ReModuleBootstrapComponent.displayName = cls.name;
+    Bootstrap.displayName = getBootstrapDisplayName(moduleName, WrappedComponent);
 
-    return ReModuleBootstrapComponent;
+    return Bootstrap;
   }
 
   return ReModuleBootstrap;

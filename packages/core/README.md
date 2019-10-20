@@ -18,8 +18,7 @@ import {
   ReModule,
   ReModuleBootstrap,
   useReModule,
-  useReModuleInjector,
-  useReModuleInjectorWithInjector
+  useReModuleInjecteds
 } from '@remod/core';
 import { Injectable } from '@remod/di';
 
@@ -30,13 +29,17 @@ class Service {
   constructor(private http: Http) {}
 }
 
-@ReModule({
-  providers: [Service, Http]
-})
-class AppModule {}
+const ParentModule = ReModule({
+  providers: [Http]
+});
+
+const ChildModule = ReModule({
+  providers: [Service]
+});
 
 const Child: FC = () => {
-  const http = useReModuleInjector(Http);
+  const { injector } = useReModule();
+  const [service]: [Service] = useModuleInjecteds([Service]);
 
   return (
     <div>
@@ -45,16 +48,18 @@ const Child: FC = () => {
   );
 }
 
-const App: FC = () => {
+const ChildBootstrap = ChildModule(Child);
+
+const Parent: FC = () => {
   const { injector } = useReModule();
-  const service = useReModuleInjectorWithInjector(injector, Service);
+  const [http]: [Http] = useModuleInjecteds([Http]);
 
   //  ...
 
   return (
-    <Child />
+    <ChildBootstrap />
   );
 };
 
-const AppBootstrap = ReModuleBootstrap(AppModule)(App);
+const ParentBootstrap = ParentModule(Parent);
 ```
