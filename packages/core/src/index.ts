@@ -1,4 +1,4 @@
-export { ReModuleBootstrap } from './module/re-module.bootstrap';
-export { ReModuleContextData, ReModuleContext, createReModuleContext } from './module/re-module.context';
-export { UseReModule, createUseReModule, useReModule, useReModuleInjecteds } from './module/re-module.hook';
-export { ReModule } from './module/re.module';
+export { ModuleBootstrap } from './module/module.bootstrap';
+export { ModuleContextData, ModuleContext, createModuleContext } from './module/module.context';
+export { UseModule, createUseModule, useModule, useProviders } from './module/module.hooks';
+export { ModuleOptions, Module } from './module/module';
