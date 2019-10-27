@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { ReflectiveInjector, Provider } from '@remod/di';
 import { ModuleContext } from './module.context';
 import { ModuleBootstrap, createModuleBootstrap } from './module.bootstrap';
-import { METADATA } from '../shared/metadata-constants';
+import { METADATA } from '../shared/metadata.constants';
 
 export interface ModuleOptions {
   readonly name?: string;
