@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { ReflectiveInjector, Provider } from '@remod/di';
 import { ModuleContext } from './module.context';
-import { ModuleBootstrap, createModuleBootstrap } from './module.bootstrap';
+import { ModuleComponent, createModuleComponent } from './module.component';
 import { METADATA } from '../shared/metadata.constants';
 
 export interface ModuleOptions {
@@ -10,14 +10,14 @@ export interface ModuleOptions {
   readonly context?: ModuleContext;
 }
 
-export interface Module extends ModuleBootstrap {}
+export interface Module extends ModuleComponent {}
 
 export function Module(options?: ModuleOptions): Module {
   const { name = 'Module', providers = [], context = ModuleContext } = options || {};
   const resolvedProviders = ReflectiveInjector.resolve(providers);
-  const ModuleBootstrap = createModuleBootstrap(name, resolvedProviders, context);
+  const ModuleComponent = createModuleComponent(name, resolvedProviders, context);
 
-  Reflect.defineMetadata(METADATA.PROVIDERS, providers, ModuleBootstrap);
+  Reflect.defineMetadata(METADATA.PROVIDERS, providers, ModuleComponent);
 
-  return ModuleBootstrap;
+  return ModuleComponent;
 }
